@@ -3,6 +3,8 @@ package br.com.alura.forum.controller;
 import java.net.URI;
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -27,7 +29,6 @@ public class TopicosController {
 	@Autowired
 	private CursoRepository cursoRepository;
 
-	// @RequestMapping(value="/topicos", method = RequestMethod.GET)
 	@GetMapping
 	public List<TopicoDto> lista(String nomeCurso) {
 		if (nomeCurso == null) {
@@ -39,9 +40,8 @@ public class TopicosController {
 		}
 	}
 
-	// @RequestMapping(value="/topicos", method = RequestMethod.POST)
 	@PostMapping
-	public ResponseEntity<TopicoDto> Cadastrar(@RequestBody TopicoForm form, UriComponentsBuilder uriBuilder) {
+	public ResponseEntity<TopicoDto> Cadastrar(@RequestBody @Valid TopicoForm form, UriComponentsBuilder uriBuilder) {
 		Topico topico = form.converter(cursoRepository);
 		topicoRepository.save(topico);
 		URI uri = uriBuilder.path("/topicos/{id}").buildAndExpand(topico.getId()).toUri();
